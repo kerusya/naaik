@@ -33,7 +33,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Copy files to remote server
-      run: scp -r ./* root@165.232.118.63:/root/kirill_tmp
+      run: scp -r ./* root@165.232.118.63:/root/kirill_tmp/naaik
       
     - name: SSH command
       uses: webfactory/ssh-agent@v0.5.3
