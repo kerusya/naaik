@@ -31,14 +31,20 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+      
+    - name: Set up SSH key
+      run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H remote_server >> ~/.ssh/known_hosts
+    
     - name: Copy files to remote server
       run: scp -r ./* root@165.232.118.63:/root/kirill_tmp/naaik
       
-    - name: SSH command
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    # - name: SSH command
+    #   uses: webfactory/ssh-agent@v0.5.3
+    #   with:
+    #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         
     # - name: Run command on remote server
     #   run: |
