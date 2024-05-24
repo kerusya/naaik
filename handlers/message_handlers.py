@@ -5,7 +5,6 @@ from jira import JIRA
 
 import config.promts as promt
 import handlers.support_functions as spf
-
 async def chatgpt_reply(update: Update, context):
     # текст входящего сообщения
     text = update.message.text
@@ -49,6 +48,7 @@ async def generate_excuse(update: Update, context):
     await update.message.reply_text(reply)   
     
     print("user:", text)
+
     print("assistant:", reply)
     return spf.CHOOSING
 

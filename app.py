@@ -43,5 +43,6 @@ conv_handler = ConversationHandler(
 )
 
 application.add_handler(conv_handler)
+
 # Запуск бота
 application.run_polling()
