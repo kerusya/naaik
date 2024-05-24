@@ -4,19 +4,23 @@ on:
   push:
     branches:
       - main
+      - ilya-test
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: copy file via ssh password
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: "165.232.118.63"
-        username: "root"
-        password: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "./*"
-        target: "/root/kirill_tmp/naaik"
-  
+      - uses: actions/checkout@v4
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: "165.232.118.63"
+          username: "root"
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./*"
+          target: "/root/kirill_tmp/naaik"
+      - name: run Docker container
+        run: |
+          docker ps -q | xargs -r docker stop
+          docker run -i -t -e TELEGRAM_BOT_TOKEN=$(TELEGRAM_BOT_TOKEN) -e OPENAI_API_KEY=$(OPENAI_API_KEY) $(IMAGE)
