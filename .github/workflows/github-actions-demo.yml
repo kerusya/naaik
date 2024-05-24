@@ -39,6 +39,10 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: run Docker container
+      run: |
+        docker ps -q | xargs -r docker stop
+        docker run -i -t -e TELEGRAM_BOT_TOKEN=$(TELEGRAM_BOT_TOKEN) -e OPENAI_API_KEY=$(OPENAI_API_KEY) $(IMAGE)
         
     # - name: Run command on remote server
     #   run: |
