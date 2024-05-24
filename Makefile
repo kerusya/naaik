@@ -1,9 +1,9 @@
 # данные пользователя на Docker Hub
-USERNAME=UserNameDockerHub
-REPO=RepositoryNameDockerHub
+USERNAME=alexdelis
+REPO=team_7_naaik
 TAG=v1
-TELEGRAM_BOT_TOKEN=1235
-OPENAI_API_KEY=1234
+TELEGRAM_BOT_TOKEN=6778200434:AAEqZnpmA2ExjVBRiPWDbM-YSQsgCwgltSk
+OPENAI_API_KEY=sk-proj-YKt52jSr4zzqJb57GI2DT3BlbkFJDyXrqHbFWo2uWVDbDFvt
 
 IMAGE = $(USERNAME)/$(REPO):$(TAG)
 
