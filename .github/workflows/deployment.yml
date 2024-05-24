@@ -23,5 +23,5 @@ jobs:
       - name: run Docker container
         run: |
           docker ps -q | xargs -r docker stop
-          docker run -i -t -e TELEGRAM_BOT_TOKEN=secrets.TELEGRAM_BOT_TOKEN -e \
+          docker run -i -e TELEGRAM_BOT_TOKEN=secrets.TELEGRAM_BOT_TOKEN -e \
           OPENAI_API_KEY=secrets.OPENAI_API_KEY alexdelis/team_7_naaik:v1
