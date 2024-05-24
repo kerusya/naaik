@@ -29,22 +29,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: SSH command
-      uses: webfactory/ssh-agent@v0.5.3
-      with: 
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+    - uses: actions/checkout@v4
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: "165.232.118.63"
+        username: "root"
+        password: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "./*"
+        target: "/root/kirill_tmp/naaik"
+    # - name: Checkout code
+    #   uses: actions/checkout@v2
+      
+    # - name: SSH command
+    #   uses: webfactory/ssh-agent@v0.5.3
+    #   with: 
+    #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+
     # - name: Set up SSH key
     #   run: |
     #       echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
     #       chmod 600 ~/.ssh/id_rsa
     #       ssh-keyscan -H remote_server >> ~/.ssh/known_hosts
     
-    - name: Copy files to remote server
-      run: scp -i secrets.SSH_PRIVATE_KEY -r ./* root@165.232.118.63:/root/kirill_tmp/naaik
-      
+    # - name: Copy files to remote server
+    #   run: scp -r ./* root@165.232.118.63:/root/kirill_tmp/naaik
 
         
     # - name: Run command on remote server
