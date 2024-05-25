@@ -11,8 +11,8 @@ markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
-        "Привет это бот помощник.\n"
-        "Я могу дать ответ в свободной форме, декомпозировать задачу в jira, придумать отмазку",
+        "Привет, это бот помощник.\n"
+        "Я могу дать ответ в свободной форме, декомпозировать задачу в jira или придумать отмазку",
         reply_markup=markup,
     )
     return CHOOSING
