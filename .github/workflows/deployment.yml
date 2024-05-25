@@ -4,19 +4,57 @@ on:
   push:
     branches:
       - main
+      - ilya-test
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: copy file via ssh password
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: "165.232.118.63"
-        username: "root"
-        password: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "./*"
-        target: "/root/kirill_tmp/naaik"
-  
+      - uses: actions/checkout@v4
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: "165.232.118.63"
+          username: "root"
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./*"
+          target: "/root/kirill_tmp/naaik"
+          
+      - name: Build Docker image
+        run: |
+          docker build --platform linux/amd64 -t alexdelis/team_7_naaik:v1 .
+          
+      - name: Kill running container
+        run: |
+          docker ps -q | xargs -r docker stop
+          
+      - name: Run Docker image
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: "165.232.118.63"
+          username: "root"
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Executing remote command on the server"|
+            docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e \
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1
+
+      # - name: SSH into remote server and run Docker command
+      #   run: |
+      #     ssh-keyscan -H 165.232.118.63 >> ~/.ssh/known_hosts
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+      #     chmod 600 ssh_key
+      #     ssh -i ssh_key root@165.232.118.63 "docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1"
+      # - name: SSH into remote server and run Docker command
+      #   run: sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh root@165.232.118.63 "docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1"
+      # - name: SSH into remote server and run Docker command
+      #   run: |
+      #     sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh root@165.232.118.63 "docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1"
+          
+      # - name: run Docker container
+      #   run: |
+      #     docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e \
+      #     OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1
+
+ # docker ps -q | xargs -r docker stop
