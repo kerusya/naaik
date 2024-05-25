@@ -48,7 +48,6 @@ async def generate_excuse(update: Update, context):
     await update.message.reply_text(reply)   
     
     print("user:", text)
-
     print("assistant:", reply)
     return spf.CHOOSING
 
