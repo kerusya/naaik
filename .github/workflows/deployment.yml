@@ -20,15 +20,25 @@ jobs:
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "./*"
           target: "/root/kirill_tmp/naaik"
+      - name: Execute SSH command on remote server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: "165.232.118.63"
+          username: "root"
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Executing remote command on the server"|
+            docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e \
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1
       # - name: build Docker image
       #   run: |
       #     docker build --platform linux/amd64 -t alexdelis/team_7_naaik:v1 .
-      - name: SSH into remote server and run Docker command
-        run: |
-          ssh-keyscan -H 165.232.118.63 >> ~/.ssh/known_hosts
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
-          chmod 600 ssh_key
-          ssh -i ssh_key root@165.232.118.63 "docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1"
+      # - name: SSH into remote server and run Docker command
+      #   run: |
+      #     ssh-keyscan -H 165.232.118.63 >> ~/.ssh/known_hosts
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+      #     chmod 600 ssh_key
+      #     ssh -i ssh_key root@165.232.118.63 "docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1"
       # - name: SSH into remote server and run Docker command
       #   run: sshpass -p ${{ secrets.SSH_PRIVATE_KEY }} ssh root@165.232.118.63 "docker run -d -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} alexdelis/team_7_naaik:v1"
       # - name: SSH into remote server and run Docker command
